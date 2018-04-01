@@ -83,7 +83,9 @@ class Airplane(object):
 
 
 if __name__ == '__main__':
+    # 统计没一架飞机的故障数量
     data_list = []
+
     for (d,sub,files) in os.walk('./A319'):
         for fl in files:
             path = d+'/'+fl
@@ -102,7 +104,104 @@ if __name__ == '__main__':
 
     fl = open('./data.js','w', encoding='utf8')
     data = json.dumps(data_list)
-    stam = 'const DATA = '+data
+    stam = 'const DATA = '+data+';'
     fl.write(stam)
     fl.close()
     
+    # 统计320机队的总体数量
+    Total = 0
+    Count = dict()
+    for (d,sub,files) in os.walk('./A319'):
+        for fl in files:
+            path = d+'/'+fl
+            plane = Airplane('ignore',path,'2018-03-30')
+            Total += plane.Total_Count
+            for (ata,count,ratio) in plane.ATA_Digit:
+                if ata in Count:
+                    tmp =  Count[ata]
+                    Count.update({ata: tmp+count})
+                else:
+                    Count.update({ata: count})
+    for (d,sub,files) in os.walk('./A320'):
+        for fl in files:
+            path = d+'/'+fl
+            plane = Airplane('ignore',path,'2018-03-30')
+            Total += plane.Total_Count
+            for (ata,count,ratio) in plane.ATA_Digit:
+                if ata in Count:
+                    tmp =  Count[ata]
+                    Count.update({ata: tmp+count})
+                else:
+                    Count.update({ata: count})
+    Count_List = []
+    for ata in Count:
+        count = Count[ata]
+        ratio = count/Total
+        Count_List.append((ata, count, ratio))
+    # decend sort
+    endindex = len(Count_List)-1
+    while True:
+        if endindex < 1:
+            break            
+        index = 0                
+        while True:
+            left = Count_List[index]
+            right = Count_List[index+1]
+            if left[1] < right[1]:
+                left, right = right, left
+                Count_List[index] = left
+                Count_List[index+1] = right
+            index += 1
+            if index == endindex:
+                break
+        endindex -= 1
+    A320 = {'Total':Total,'ATA':Count_List}
+    statics = json.dumps(A320)
+    stam = 'const A320 = '+statics+';'
+    fl = open('./A320.js','w', encoding='utf8')
+    fl.write(stam)
+    fl.close()
+
+
+    # 统计330机队的总体数量
+    Total = 0
+    Count = dict()
+    for (d,sub,files) in os.walk('./A330'):
+        for fl in files:
+            path = d+'/'+fl
+            plane = Airplane('ignore',path,'2018-03-30')
+            Total += plane.Total_Count
+            for (ata,count,ratio) in plane.ATA_Digit:
+                if ata in Count:
+                    tmp =  Count[ata]
+                    Count.update({ata: tmp+count})
+                else:
+                    Count.update({ata: count})
+    Count_List = []
+    for ata in Count:
+        count = Count[ata]
+        ratio = count/Total
+        Count_List.append((ata, count, ratio))
+    # decend sort
+    endindex = len(Count_List)-1
+    while True:
+        if endindex < 1:
+            break            
+        index = 0                
+        while True:
+            left = Count_List[index]
+            right = Count_List[index+1]
+            if left[1] < right[1]:
+                left, right = right, left
+                Count_List[index] = left
+                Count_List[index+1] = right
+            index += 1
+            if index == endindex:
+                break
+        endindex -= 1
+    A330 = {'Total':Total,'ATA':Count_List}
+    statics = json.dumps(A330)
+    stam = 'const A330 = '+statics+';'
+    fl = open('./A330.js','w', encoding='utf8')
+    fl.write(stam)
+    fl.close()
