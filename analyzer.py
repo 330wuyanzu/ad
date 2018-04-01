@@ -37,22 +37,33 @@ class Airplane(object):
             (ata, count, ratio) = (ata, count, count/self.Total_Count)
             self.ATA_Digit.append((ata, count, ratio))
         
+    def __decendSort(self):
+        endindex = len(self.ATA_Digit)-1
+        while True:
+            if endindex < 1:
+                break            
+            index = 0                
+            while True:
+                left = self.ATA_Digit[index]
+                right = self.ATA_Digit[index+1]
+                if left[1] < right[1]:
+                    left, right = right, left
+                    self.ATA_Digit[index] = left
+                    self.ATA_Digit[index+1] = right
+                index += 1
+                if index == endindex:
+                    break
+            endindex -= 1
+
+
     def ForSerial(self):
+        self.__decendSort()
         serial = {
             "Airplane": self.Registry,
             "Deadline": self.Deadline,
             "Total": self.Total_Count,
-            "ATA":{}
+            "ATA": self.ATA_Digit
         }
-        ata = {}
-        for d in self.ATA_Digit:
-            tmp = {
-                d[0]: {
-                    "count":d[1],
-                    "ratio":d[2]}
-            }
-            ata.update(tmp)
-        serial.update({"ATA":ata})
         return serial
 
     def SaveResult(self, path):
@@ -72,20 +83,26 @@ class Airplane(object):
 
 
 if __name__ == '__main__':
+    data_list = []
     for (d,sub,files) in os.walk('./A319'):
         for fl in files:
             path = d+'/'+fl
             reg = "B-"+fl[0:4]
-            Airplane(reg, path, '2018-03-30').SaveResult('./results')
+            data_list.append(Airplane(reg, path, '2018-03-30').ForSerial())
     for (d,sub,files) in os.walk('./A320'):
         for fl in files:
             path = d+'/'+fl
             reg = "B-"+fl[0:4]
-            Airplane(reg, path, '2018-03-30').SaveResult('./results')
+            data_list.append(Airplane(reg, path, '2018-03-30').ForSerial())
     for (d,sub,files) in os.walk('./A330'):
         for fl in files:
             path = d+'/'+fl
             reg = "B-"+fl[0:4]
-            Airplane(reg, path, '2018-03-30').SaveResult('./results')
+            data_list.append(Airplane(reg, path, '2018-03-30').ForSerial())
 
+    fl = open('./data.js','w', encoding='utf8')
+    data = json.dumps(data_list)
+    stam = 'const DATA = '+data
+    fl.write(stam)
+    fl.close()
     
