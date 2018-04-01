@@ -155,7 +155,7 @@ if __name__ == '__main__':
             if index == endindex:
                 break
         endindex -= 1
-    A320 = {'Total':Total,'ATA':Count_List}
+    A320 = {'Deadline':'2018-03-30','Total':Total,'ATA':Count_List}
     statics = json.dumps(A320)
     stam = 'const A320 = '+statics+';'
     fl = open('./A320.js','w', encoding='utf8')
@@ -199,7 +199,7 @@ if __name__ == '__main__':
             if index == endindex:
                 break
         endindex -= 1
-    A330 = {'Total':Total,'ATA':Count_List}
+    A330 = {'Deadline':'2018-03-30','Total':Total,'ATA':Count_List}
     statics = json.dumps(A330)
     stam = 'const A330 = '+statics+';'
     fl = open('./A330.js','w', encoding='utf8')
