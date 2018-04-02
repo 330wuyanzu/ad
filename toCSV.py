@@ -22,7 +22,7 @@ def toCSV(data_dict, savePath):
             yyyy = str(date)[0:4]
             mm = str(date)[4:6]
             dd = str(date)[6:8]
-            rcd = "\r\n{0},{1},{2},{3}".format(ata,yyyy,mm,dd)
+            rcd = "\n{0},{1},{2},{3}".format(ata,yyyy,mm,dd)
             tmp.write(rcd)
             tmp.flush()
     tmp.close()
