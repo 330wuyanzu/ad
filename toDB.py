@@ -51,10 +51,10 @@ if __name__ == '__main__':
                 writer.Insert(drc+'/'+fl)
 
     writer = DBwriter()
-    batch('./A319',writer)
+    batch('./CSV/A319',writer)
     
     writer = DBwriter(type="A320")
-    batch('./A320',writer)
+    batch('./CSV/A320',writer)
     
     writer = DBwriter(table="A330",type="A330")
-    batch('./A330',writer)
+    batch('./CSV/A330',writer)

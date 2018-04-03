@@ -27,14 +27,14 @@ def toCSV(data_dict, savePath):
             tmp.flush()
     tmp.close()
 
-def transfer(drc):
+def transfer(drc, svp):
     files = os.listdir(drc)
     for fl in files:
         if fl.endswith('.json'):
             data = readJSON(drc+'/'+fl)
-            toCSV(data, drc+'/'+fl+'.csv')
+            toCSV(data, svp+'/'+fl+'.csv')
 
 if __name__ == '__main__':
-    transfer('./A319')
-    transfer('./A320')
-    transfer('./A330')
+    transfer('./JSON/A319', './CSV/A319')
+    transfer('./JSON/A320', './CSV/A320')
+    transfer('./JSON/A330', './CSV/A330')
